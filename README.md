@@ -6,6 +6,7 @@
 - [NodeJS](https://nodejs.org/en/)
 - [Expressjs](https://expressjs.com/)
 - [Jasmine](https://jasmine.github.io/)
+- [Sharp](https://sharp.pixelplumbing.com/)
 
 ## Api Reference
   **Endpoint for image**
