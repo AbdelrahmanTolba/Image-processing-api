@@ -14,23 +14,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sharp_1 = __importDefault(require("sharp"));
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+// import a from '../../images'
 const resizeingImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { filename, width, height } = req.query;
-        const imageLocation = yield `./images/${filename}.png`;
+        const imageLocation = `${path_1.default.resolve(__dirname, `../../assets/images/${filename}.jpg`)}`;
         const widthNum = parseInt(width);
         const heightNum = parseInt(height);
-        const imagePath = `${filename}_${widthNum}_${height}.png`;
+        const imagePath = path_1.default.resolve(__dirname, `../../assets/resizingImages/${filename}_${widthNum}_${heightNum}.jpg`);
         if (fs_1.default.existsSync(imageLocation)) {
             yield (0, sharp_1.default)(imageLocation)
                 .resize({ width: widthNum, height: heightNum })
-                .toFile(`${filename}_${width}_${height}.png`);
+                .toFile(`${imagePath}`);
         }
         else {
             res.status(404).send('Photo is not exist');
             return;
         }
-        res.sendFile(`./${imagePath}`);
+        res.status(200).sendFile(`${imagePath}`);
     }
     catch (err) {
         console.log(err);

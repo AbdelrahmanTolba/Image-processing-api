@@ -13,13 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = __importDefault(require("../index"));
+const index_1 = __importDefault(require("../../index"));
+const fs_1 = __importDefault(require("fs"));
 const request = (0, supertest_1.default)(index_1.default);
-describe('Test responses from endpoints => ', () => {
-    describe('endpoint: /', () => {
-        it('gets /', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield request.get('/');
-            expect(response.status).toBe(200);
-        }));
-    });
+describe('Image proscissing', () => {
+    it('folder is creatred', () => __awaiter(void 0, void 0, void 0, function* () {
+        yield request.get('/images?filename=nature&width=199&height=199');
+        let isFileExist;
+        try {
+            const path = `assets/resizingImages/nature_199_199.jpg`;
+            isFileExist = fs_1.default.existsSync(path);
+        }
+        catch (err) {
+            isFileExist = false;
+        }
+        expect(isFileExist).toBeTrue();
+    }));
 });

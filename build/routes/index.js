@@ -7,7 +7,10 @@ const express_1 = __importDefault(require("express"));
 const image_route_1 = __importDefault(require("./api/image.route"));
 const routes = express_1.default.Router();
 routes.get('/', (_, res) => {
-    res.send('Connected!');
+    res.status(200).send('<h1>Connected!</h1>');
 });
 routes.use('/images', image_route_1.default);
+routes.all('*', (_, res) => {
+    res.redirect('/api/images');
+});
 exports.default = routes;

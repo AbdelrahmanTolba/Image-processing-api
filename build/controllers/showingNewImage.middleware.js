@@ -13,15 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const showingResizingImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { filename, width, height } = req.query;
     const widthNum = parseInt(width);
     const heightNum = parseInt(height);
-    const imagePath = `${filename}_${widthNum}_${heightNum}.png`;
-    fs_1.default.readFile(imagePath, function (error, data) {
+    const imagePath = path_1.default.resolve(__dirname, `../../assets/resizingImages/${filename}_${widthNum}_${heightNum}.jpg`);
+    fs_1.default.readFile(imagePath, (error) => {
         if (error)
             throw error;
-        res.write(data);
+        else
+            res;
+        // res.write(data);
     });
 });
 exports.default = showingResizingImage;

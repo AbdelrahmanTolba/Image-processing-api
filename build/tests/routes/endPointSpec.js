@@ -13,13 +13,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = __importDefault(require("../index"));
+const index_1 = __importDefault(require("../../index"));
 const request = (0, supertest_1.default)(index_1.default);
 describe('Test responses from endpoints => ', () => {
-    describe('endpoint: /', () => {
-        it('gets /', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield request.get('/');
+    describe('endpoint: /images', () => {
+        it('gets /images (valid args)', () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield request.get('/images');
+            expect(response.status).toBe(400);
+        }));
+        it('gets /images?filename=nature&width=199&height=199 (valid args)', () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield request.get('/images?filename=nature&width=199&height=199');
             expect(response.status).toBe(200);
+        }));
+        it('gets /images?filename=nature&width=-200&height=200 (invalid args)', () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield request.get('/images?filename=nature&width=-200&height=200');
+            expect(response.status).toBe(400);
+        }));
+        it('gets /images (no arguments)', () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield request.get('/images');
+            expect(response.status).toBe(400);
         }));
     });
 });
