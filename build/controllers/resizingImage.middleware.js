@@ -16,7 +16,7 @@ const sharp_1 = __importDefault(require("sharp"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // import a from '../../images'
-const resizeingImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const resizeingImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { filename, width, height } = req.query;
         const imageLocation = `${path_1.default.resolve(__dirname, `../../assets/images/${filename}.jpg`)}`;
@@ -40,9 +40,5 @@ const resizeingImage = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     catch (err) {
         // console.log(err);
     }
-    // next();
 });
 exports.default = resizeingImage;
-function then(arg0) {
-    throw new Error('Function not implemented.');
-}

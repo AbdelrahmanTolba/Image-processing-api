@@ -1,11 +1,10 @@
 import express from 'express';
 
 import parameterValidation from '../../middlewares/queryValidation.middleware';
-import resizingImage from '../../middlewares/resizingImage.middleware';
-import showingImage from '../../controllers/showingNewImage.middleware';
+import resizingImage from '../../controllers/resizingImage.middleware';
 
 const image = express.Router();
 
-image.get('/', parameterValidation, resizingImage, showingImage);
+image.get('/', parameterValidation, resizingImage);
 
 export default image;

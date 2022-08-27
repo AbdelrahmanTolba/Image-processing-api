@@ -21,10 +21,6 @@ describe('Test responses from endpoints => ', () => {
             const response = yield request.get('/images');
             expect(response.status).toBe(400);
         }));
-        it('gets /images?filename=nature&width=500&height=500 (valid args)', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield request.get('/images?filename=nature&width=199&height=199');
-            expect(response.status).toBe(200);
-        }));
         it('gets /images?filename=nature&width=-750&height=750 (invalid args)', () => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield request.get('/images?filename=nature&width=-750&height=750');
             expect(response.status).toBe(400);

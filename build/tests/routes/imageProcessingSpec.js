@@ -17,9 +17,10 @@ const index_1 = __importDefault(require("../../index"));
 const image_size_1 = __importDefault(require("image-size"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const promises_1 = __importDefault(require("fs/promises"));
 const request = (0, supertest_1.default)(index_1.default);
 describe('Image proscissing', () => {
-    it('folder is creatred', () => __awaiter(void 0, void 0, void 0, function* () {
+    it('file is creatred', () => __awaiter(void 0, void 0, void 0, function* () {
         yield request.get('/images?filename=nature&width=199&height=199');
         let isFileExist;
         try {
@@ -30,6 +31,22 @@ describe('Image proscissing', () => {
             isFileExist = false;
         }
         expect(isFileExist).toBeTrue();
+    }));
+    describe('GET /images', () => {
+        it('created a resizing image', (done) => {
+            (0, supertest_1.default)(index_1.default)
+                .get('/images?filename=nature&height=100&width=100')
+                .then(() => {
+                promises_1.default
+                    .stat(path_1.default.resolve(__dirname, '../../../assets/resizingImages/nature_100_100.jpg'))
+                    .then((fileStat) => expect(fileStat).not.toBeNull());
+                done();
+            });
+        });
+    });
+    it('gets /images?filename=nature&width=500&height=500 (valid args)', () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield request.get('/images?filename=nature&width=199&height=199');
+        expect(response.status).toBe(200);
     }));
     it('created a resizing image with the correct height and width', (done) => {
         (0, supertest_1.default)(index_1.default)

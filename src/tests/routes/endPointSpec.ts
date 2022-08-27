@@ -12,13 +12,6 @@ describe('Test responses from endpoints => ', (): void => {
       expect(response.status).toBe(400);
     });
 
-    it('gets /images?filename=nature&width=500&height=500 (valid args)', async (): Promise<void> => {
-      const response: supertest.Response = await request.get(
-        '/images?filename=nature&width=199&height=199'
-      );
-      expect(response.status).toBe(200);
-    });
-
     it('gets /images?filename=nature&width=-750&height=750 (invalid args)', async (): Promise<void> => {
       const response: supertest.Response = await request.get(
         '/images?filename=nature&width=-750&height=750'
