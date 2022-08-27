@@ -8,6 +8,6 @@ routes.get('/', (_, res: Response) => {
 });
 routes.use('/images', images);
 routes.all('*', (_, res) => {
-  res.redirect('/api/images');
+  res.redirect('/images');
 });
 export default routes;

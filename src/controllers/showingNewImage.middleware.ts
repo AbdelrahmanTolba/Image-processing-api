@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import fs from 'fs';
 import path from 'path';
 
 const showingResizingImage = async (
   req: Request,
-  res: Response
 ): Promise<void> => {
   const { filename, width, height } = req.query;
   const widthNum = parseInt(width as string);
@@ -15,8 +14,6 @@ const showingResizingImage = async (
   );
   fs.readFile(imagePath, (error) => {
     if (error) throw error;
-    else res;
-    // res.write(data);
   });
 };
 

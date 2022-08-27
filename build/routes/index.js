@@ -11,6 +11,6 @@ routes.get('/', (_, res) => {
 });
 routes.use('/images', image_route_1.default);
 routes.all('*', (_, res) => {
-    res.redirect('/api/images');
+    res.redirect('/images');
 });
 exports.default = routes;

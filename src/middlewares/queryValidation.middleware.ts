@@ -4,9 +4,8 @@ const queryParameterValidation = (
   res: Response,
   next: NextFunction
 ) => {
-  // console.log(res);
   const { filename, width, height } = req.query;
-  if (!filename && !width && !height) {
+  if (!filename || !width || !height) {
     res
       .status(400)
       .send(
@@ -23,15 +22,14 @@ const queryParameterValidation = (
     res.status(400).send('filename should to be string');
     return;
   }
-  if ((width && Number(width) <= 0) || width === '') {
+  if ((width && Number(width) <= 0) || width === '' || isNaN(+width)) {
     return res.status(400).send(`Invalid "width" value: ${width}`);
   }
 
-  if ((height && Number(height) <= 0) || height === '') {
+  if ((height && Number(height) <= 0) || height === '' || isNaN(+height)) {
     res.status(400).send(`Invalid "height" value: ${height}`);
     return;
   }
-
   next();
 };
 

@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const showingResizingImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const showingResizingImage = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const { filename, width, height } = req.query;
     const widthNum = parseInt(width);
     const heightNum = parseInt(height);
@@ -22,9 +22,6 @@ const showingResizingImage = (req, res) => __awaiter(void 0, void 0, void 0, fun
     fs_1.default.readFile(imagePath, (error) => {
         if (error)
             throw error;
-        else
-            res;
-        // res.write(data);
     });
 });
 exports.default = showingResizingImage;

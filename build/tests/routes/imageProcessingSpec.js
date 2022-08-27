@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const index_1 = __importDefault(require("../../index"));
+const image_size_1 = __importDefault(require("image-size"));
+const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const request = (0, supertest_1.default)(index_1.default);
 describe('Image proscissing', () => {
@@ -29,4 +31,15 @@ describe('Image proscissing', () => {
         }
         expect(isFileExist).toBeTrue();
     }));
+    it('created a resizing image with the correct height and width', (done) => {
+        (0, supertest_1.default)(index_1.default)
+            .get('/images?filename=nature&width=200&height=250')
+            .then(() => {
+            const dimensions = (0, image_size_1.default)(path_1.default.resolve(__dirname, '../../../assets/resizingImages/nature_200_250.jpg'));
+            console.log(dimensions.width);
+            expect(dimensions.width).toEqual(200);
+            expect(dimensions.height).toEqual(250);
+            done();
+        });
+    });
 });
