@@ -14,9 +14,13 @@ const resizeingImage = async (req: Request, res: Response): Promise<void> => {
 
     const widthNum = parseInt(width as string);
     const heightNum = parseInt(height as string);
+    const cloneImageDir = `assets/resizingImages/`;
+    if (!fs.existsSync(cloneImageDir)) {
+      fs.mkdirSync(cloneImageDir, { recursive: true });
+    }
     const cloneImagePath = path.resolve(
       __dirname,
-      `../../assets/resizingImages/${filename}_${widthNum}_${heightNum}.jpg`
+      `../../${cloneImageDir}/${filename}_${widthNum}_${heightNum}.jpg`
     );
     if (fs.existsSync(originalImagePath)) {
       if (fs.existsSync(cloneImagePath)) {

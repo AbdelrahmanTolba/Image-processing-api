@@ -23,7 +23,11 @@ const resizeingImage = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const originalImagePath = `${path_1.default.resolve(__dirname, `../../assets/images/${filename}.jpg`)}`;
         const widthNum = parseInt(width);
         const heightNum = parseInt(height);
-        const cloneImagePath = path_1.default.resolve(__dirname, `../../assets/resizingImages/${filename}_${widthNum}_${heightNum}.jpg`);
+        const cloneImageDir = `assets/resizingImages/`;
+        if (!fs_1.default.existsSync(cloneImageDir)) {
+            fs_1.default.mkdirSync(cloneImageDir, { recursive: true });
+        }
+        const cloneImagePath = path_1.default.resolve(__dirname, `../../${cloneImageDir}/${filename}_${widthNum}_${heightNum}.jpg`);
         if (fs_1.default.existsSync(originalImagePath)) {
             if (fs_1.default.existsSync(cloneImagePath)) {
                 fs_1.default.readFile(cloneImagePath, (err) => {

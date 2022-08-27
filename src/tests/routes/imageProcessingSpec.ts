@@ -1,6 +1,5 @@
 import supertest from 'supertest';
 import app from '../../index';
-import sizeOf from 'image-size';
 import path from 'path';
 import fs from 'fs';
 import fsPromise from 'fs/promises';
