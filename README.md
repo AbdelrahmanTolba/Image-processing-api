@@ -14,12 +14,13 @@
 
 **Endpoint for image**
 
-````sh
-  Get /images?filename={filename}&width={width}&height={height}```
+```sh
+  Get /images?filename={filename}&width={width}&height={height}
+ ```
 **Qurey parameters**
 ```sh
 Get /images?filename=nature&width=250&height=250
-````
+```
 
 1. **filename**: Must be string and it has name of photo
 2. **width**: Must be number and it has width of photo
