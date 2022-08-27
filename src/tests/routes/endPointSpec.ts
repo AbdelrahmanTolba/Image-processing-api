@@ -5,6 +5,7 @@ import app from '../../index';
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 
 describe('Test responses from endpoints => ', (): void => {
+  
   describe('endpoint: /images', (): void => {
     it('gets /images (valid args)', async (): Promise<void> => {
       const response: supertest.Response = await request.get('/images');

@@ -14,18 +14,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const index_1 = __importDefault(require("../../index"));
-const image_size_1 = __importDefault(require("image-size"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const promises_1 = __importDefault(require("fs/promises"));
+const resizingImage_middleware_1 = require("../../controllers/resizingImage.middleware");
 const request = (0, supertest_1.default)(index_1.default);
 describe('Image proscissing', () => {
     it('file is creatred', () => __awaiter(void 0, void 0, void 0, function* () {
-        yield request.get('/images?filename=nature&width=199&height=199');
+        let width = Math.floor(Math.random() * 1000 + 50);
+        let height = Math.floor(Math.random() * 1000 + 50);
+        let imagePath = `assets/resizingImages/nature_${width}_${height}.jpg`;
+        while (fs_1.default.existsSync(imagePath)) {
+            width = Math.floor(Math.random() * 1000 + 50);
+            height = Math.floor(Math.random() * 1000 + 50);
+            imagePath = `assets/resizingImages/nature_${width}_${height}.jpg`;
+        }
+        yield request.get(`/images?filename=nature&width=${width}&height=${height}`);
         let isFileExist;
         try {
-            const path = `assets/resizingImages/nature_199_199.jpg`;
-            isFileExist = fs_1.default.existsSync(path);
+            isFileExist = fs_1.default.existsSync(imagePath);
+            isFileExist && fs_1.default.unlinkSync(imagePath);
+        }
+        catch (err) {
+            isFileExist = false;
+        }
+        expect(isFileExist).toBeTrue();
+    }));
+    it('Sharp function is run successfully', () => __awaiter(void 0, void 0, void 0, function* () {
+        let width = Math.floor(Math.random() * 1000 + 50);
+        let height = Math.floor(Math.random() * 1000 + 50);
+        const originPath = `assets/images/nature.jpg`;
+        let clonePath = `assets/resizingImages/nature_${width}_${height}.jpg`;
+        while (fs_1.default.existsSync(clonePath)) {
+            width = Math.floor(Math.random() * 1000 + 50);
+            height = Math.floor(Math.random() * 1000 + 50);
+            clonePath = `assets/resizingImages/nature_${width}_${height}.jpg`;
+        }
+        yield (0, resizingImage_middleware_1.resizeImage)(originPath, clonePath, width, height);
+        let isFileExist;
+        try {
+            isFileExist = fs_1.default.existsSync(clonePath);
+            isFileExist && fs_1.default.unlinkSync(clonePath);
         }
         catch (err) {
             isFileExist = false;
@@ -33,30 +62,26 @@ describe('Image proscissing', () => {
         expect(isFileExist).toBeTrue();
     }));
     describe('GET /images', () => {
-        it('created a resizing image', (done) => {
+        it('created a resizing image', () => __awaiter(void 0, void 0, void 0, function* () {
+            const width = Math.floor(Math.random() * 1000 + 50);
+            const height = Math.floor(Math.random() * 1000 + 50);
+            const imagePath = `assets/resizingImages/nature_${width}_${height}.jpg`;
             (0, supertest_1.default)(index_1.default)
-                .get('/images?filename=nature&height=100&width=100')
+                .get(`/images?filename=nature&width=${width}&height=${height}`)
                 .then(() => {
                 promises_1.default
-                    .stat(path_1.default.resolve(__dirname, '../../../assets/resizingImages/nature_100_100.jpg'))
+                    .stat(path_1.default.resolve(__dirname, `../../../${imagePath}`))
                     .then((fileStat) => expect(fileStat).not.toBeNull());
-                done();
+                fs_1.default.unlinkSync(`${imagePath}`);
             });
-        });
+        }));
     });
-    it('gets /images?filename=nature&width=500&height=500 (valid args)', () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield request.get('/images?filename=nature&width=199&height=199');
+    it('gets /(valid args)', () => __awaiter(void 0, void 0, void 0, function* () {
+        const width = Math.floor(Math.random() * 1000 + 50);
+        const height = Math.floor(Math.random() * 1000 + 50);
+        const imagePath = `assets/resizingImages/nature_${width}_${height}.jpg`;
+        const response = yield request.get(`/images?filename=nature&width=${width}&height=${height}`);
+        fs_1.default.unlinkSync(imagePath);
         expect(response.status).toBe(200);
     }));
-    it('created a resizing image with the correct height and width', (done) => {
-        (0, supertest_1.default)(index_1.default)
-            .get('/images?filename=nature&width=200&height=250')
-            .then(() => {
-            const dimensions = (0, image_size_1.default)(path_1.default.resolve(__dirname, '../../../assets/resizingImages/nature_200_250.jpg'));
-            console.log(dimensions.width);
-            expect(dimensions.width).toEqual(200);
-            expect(dimensions.height).toEqual(250);
-            done();
-        });
-    });
 });

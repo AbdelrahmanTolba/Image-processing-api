@@ -7,31 +7,47 @@ import path from 'path';
 const resizeingImage = async (req: Request, res: Response): Promise<void> => {
   try {
     const { filename, width, height } = req.query;
-    const imageLocation = `${path.resolve(
+    const originalImagePath = `${path.resolve(
       __dirname,
       `../../assets/images/${filename}.jpg`
     )}`;
 
     const widthNum = parseInt(width as string);
     const heightNum = parseInt(height as string);
-    const imagePath = path.resolve(
+    const cloneImagePath = path.resolve(
       __dirname,
       `../../assets/resizingImages/${filename}_${widthNum}_${heightNum}.jpg`
     );
-    if (fs.existsSync(imagePath)) {
-      fs.readFile(imagePath, (err) => {
-        if (err) throw err;
-      });
-      res.status(200).sendFile(`${imagePath}`);
+    if (fs.existsSync(originalImagePath)) {
+      if (fs.existsSync(cloneImagePath)) {
+        fs.readFile(cloneImagePath, (err) => {
+          if (err) throw err;
+        });
+        res.status(200).sendFile(`${cloneImagePath}`);
+      } else {
+        await resizeImage(
+          originalImagePath,
+          cloneImagePath,
+          widthNum,
+          heightNum
+        );
+        res.status(200).sendFile(`${cloneImagePath}`);
+      }
     } else {
-      await sharp(imageLocation)
-        .resize({ width: widthNum, height: heightNum })
-        .toFile(`${imagePath}`);
-      res.status(200).sendFile(`${imagePath}`);
+      res.status(400).send(`Photo doesn't exist`);
     }
   } catch (err) {
-    // console.log(err);
+    res.status(400).send(`Photo doesn't exist`);
   }
 };
-
+export const resizeImage = async (
+  oPath: string,
+  cPath: string,
+  width: number,
+  height: number
+): Promise<void> => {
+  await sharp(oPath)
+    .resize({ width: width, height: height })
+    .toFile(`${cPath}`);
+};
 export default resizeingImage;
