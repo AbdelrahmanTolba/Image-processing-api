@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
-// import a from '../../images'
 
 const resizeingImage = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -12,9 +11,10 @@ const resizeingImage = async (req: Request, res: Response): Promise<void> => {
       `../../assets/images/${filename}.jpg`
     )}`;
 
-    const widthNum = parseInt(width as string);
-    const heightNum = parseInt(height as string);
-    const cloneImageDir = `assets/resizingImages/`;
+    const widthNum: number = parseInt(width as string);
+    const heightNum: number = parseInt(height as string);
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+    const cloneImageDir: string = `assets/resizingImages/`;
     if (!fs.existsSync(cloneImageDir)) {
       fs.mkdirSync(cloneImageDir, { recursive: true });
     }
